@@ -42,8 +42,8 @@ return [
             'events' => WebhookCommand::DEFAULT_EVENTS,
         ],
         'products' => [
-            'product_1' => env('STRIPE_PRODUCT_1'),
-            'product_2' => env('STRIPE_PRODUCT_2'),
+            'product_price_1' => env('STRIPE_PRODUCT_PRICE_1'),
+            'product_price_2' => env('STRIPE_PRODUCT_PRICE_2'),
         ]
     ],
 ];
