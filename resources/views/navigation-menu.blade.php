@@ -42,6 +42,11 @@
                                         {{ __('Manage Team') }}
                                     </div>
 
+                                    <!-- Team Billing -->
+                                    <x-dropdown-link href="{{ route('billing') }}">
+                                        {{ __('Billing') }}
+                                    </x-dropdown-link>
+
                                     <!-- Team Settings -->
                                     <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
                                         {{ __('Team Settings') }}

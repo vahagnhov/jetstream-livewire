@@ -13,7 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+      {{--  <script src="https://js.stripe.com/v3/"></script>--}}
         <!-- Styles -->
         @livewireStyles
     </head>
@@ -42,4 +42,12 @@
 
         @livewireScripts
     </body>
+{{--    <script>
+        const stripe = Stripe('stripe-public-key');
+
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+
+        cardElement.mount('#card-element');
+    </script>--}}
 </html>
