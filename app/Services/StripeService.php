@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Constants\SubscriptionOptions;
+use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\StripeClient;
 
@@ -18,6 +20,7 @@ class StripeService
 
     public function cancelPurchase($subscriptionId)
     {
+        Auth::user()->subscription(SubscriptionOptions::DEFAULT)->cancel();
         $stripe = new StripeClient(config('services.stripe.secret'));
         $stripe->subscriptions->cancel($subscriptionId, []);
     }

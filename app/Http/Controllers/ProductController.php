@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\SubscriptionOptions;
 use App\Http\Requests\ProductPurchaseFormRequest;
 use App\Jobs\SendPurchaseProductEmailJob;
 use App\Models\Product;
@@ -84,7 +85,7 @@ class ProductController extends Controller
         }
 
         try {
-            $request->user()->newSubscription($request->product, $product->stripe_product)
+            $request->user()->newSubscription(SubscriptionOptions::DEFAULT, $product->stripe_product) /////// $request->product
                 ->create($request->token);
             //dispatch(new PurchaseProductJob($details));
         } catch (IncompletePayment $exception) {
