@@ -214,7 +214,7 @@
                                             wire:loading.attr="disabled"
                                             class="bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 font-bold border-none shadow-none text-center"
                                         >
-                                            <span class="mx-auto">Subscribe</span>
+                                            <span class="mx-auto">SElect</span>
                                         </x-secondary-button>
                                         {{--@if(!$currentPlan)
                                             <x-button
