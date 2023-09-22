@@ -1,3 +1,7 @@
+✔️ Laravel Developer Test
+======================
+>  Laravel Cashier For Stripe Integration.
+
 # Laravel Cashier For Stripe Integration
 
 ## Why did I choose the Laravel Cashier package to integrate Stripe into my development task application?
@@ -16,6 +20,20 @@ developer-friendly ecosystem, making it a natural choice for our project.
       Expires: 02/28
       CVC Code: 123
       Zip: 10004
+
+## 🔌 Requirements
+
+- PHP version: >= 8.0
+- Composer
+- Node.js
+
+## 🧰 Built with
+
+- Laravel 10
+- Jetstream Livewire
+- Laravel Cashier
+- spatie/laravel-permission
+- Bootstrap 5
 
 ## Installation
 

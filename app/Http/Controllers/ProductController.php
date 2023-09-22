@@ -121,6 +121,7 @@ class ProductController extends Controller
         $this->userRepository->assignUserRole($request, $product->product_type);
 
         $successMessage = trans('product/messages.purchased_success');
-        return redirect()->route('home')->with('success', $successMessage);
+        session()->flash('success', $successMessage);
+        return redirect()->back()->with('success', $successMessage); //
     }
 }

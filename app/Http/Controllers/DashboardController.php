@@ -12,6 +12,9 @@ class DashboardController extends Controller
 {
     protected $stripe;
 
+    /**
+     * @param StripeService $stripe
+     */
     public function __construct(StripeService $stripe)
     {
         $this->stripe = $stripe;
@@ -29,18 +32,20 @@ class DashboardController extends Controller
         $lastFourDigitsOfText = trans('dashboard/messages.last_four_digits_of');
         $cardNumberText = trans('dashboard/messages.card_number');
 
-        $subscriptions = $user->subscriptions()->get();
-        $subscribed = $subscriptions[0]->ends_at;
-
+        /* $subscriptions = $user->subscriptions()->get();
+         $subscribed = $subscriptions[0]->ends_at;*/
+        $hasCard = true;
         if ($user->hasRole(Roles::B2C_CUSTOMER) && $lastFourDigits) {
             $purchaseDetails = "$lastFourDigitsOfText B2C $cardNumberText: $lastFourDigits";
         } elseif ($user->hasRole(Roles::B2B_CUSTOMER) && $lastFourDigits) {
             $purchaseDetails = "$lastFourDigitsOfText B2B $cardNumberText: $lastFourDigits";
         } else {
+            $hasCard = false;
             $purchaseDetails = trans('dashboard/messages.no_purchase');
         }
 
-        $canCancelPurchase = $user->can(Permission::CANCEL_PURCHASE) && !$subscribed;
+        $canCancelPurchase = $user->can(Permission::CANCEL_PURCHASE) && $hasCard/*&& !$subscribed*/;
+
         return view('dashboard.index', compact('user', 'purchaseDetails', 'canCancelPurchase'));
     }
 

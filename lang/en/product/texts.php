@@ -12,10 +12,9 @@ return [
     */
 
     'select_product' => 'Select Product:',
-    'monthly' => 'Mo',
     'choose' => 'Choose',
+    'purchase' => 'Purchase',
     'you_will_be_charged' => 'You will be charged',
     'for_product' => ' for Product - ',
     'card_details' => 'Card Details',
-
 ];

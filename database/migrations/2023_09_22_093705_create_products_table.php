@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->text('description');
             $table->enum('product_type', ['B2B', 'B2C'])->default('B2C');
+            $table->string('billing_period')->default('Monthly');
             $table->timestamps();
         });
     }
