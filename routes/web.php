@@ -37,7 +37,7 @@ Route::middleware([
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::post('purchase', [ProductController::class, 'purchase'])->name('purchase.create');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');//// .index
     Route::post('/cancel-purchase', [DashboardController::class, 'cancelPurchase'])->name('cancel-purchase');
 });
 

@@ -1,6 +1,6 @@
 ✔️ Laravel Developer Test
 ======================
->  Laravel Cashier For Stripe Integration.
+>  Laravel Ecommerce App Using Cashier For Stripe Integration.
 
 # Laravel Cashier For Stripe Integration
 
@@ -23,17 +23,17 @@ developer-friendly ecosystem, making it a natural choice for our project.
 
 ## 🔌 Requirements
 
-- PHP version: >= 8.0
+- PHP version: >= 8.1
 - Composer
 - Node.js
 
 ## 🧰 Built with
 
 - Laravel 10
-- Jetstream Livewire
+- Jetstream Livewire 3
 - Laravel Cashier
 - spatie/laravel-permission
-- Bootstrap 5
+- Tailwind CSS
 
 ## Installation
 

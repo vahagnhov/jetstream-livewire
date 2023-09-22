@@ -12,13 +12,13 @@ class StripeService
     public function __construct()
     {
         $this->stripe = new Stripe();
-        $this->stripe->setApiKey(config('cashier.key'));
-        $this->stripe->setApiKey(config('cashier.secret'));
+        $this->stripe->setApiKey(config('services.stripe.key'));
+        $this->stripe->setApiKey(config('services.stripe.secret'));
     }
 
     public function cancelPurchase($subscriptionId)
     {
-        $stripe = new StripeClient(config('cashier.secret'));
+        $stripe = new StripeClient(config('services.stripe.secret'));
         $stripe->subscriptions->cancel($subscriptionId, []);
     }
 }

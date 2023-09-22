@@ -97,8 +97,9 @@
                                             {{$product->name}}
                                         </div>
                                         <div class="font-bold text-lg">
-                                        @lang('product/texts.you_will_be_charged') ${{ number_format($product->price, 2) }}
-                                        @lang('product/texts.for_product') {{ $product->name }}
+                                            @lang('product/texts.you_will_be_charged')
+                                            ${{ number_format($product->price, 2) }}
+                                            @lang('product/texts.for_product') {{ $product->name }}
                                         </div>
                                         <div class="font-bold">
                                                  <span class="text-4xl font-extrabold">
@@ -116,58 +117,105 @@
 
                                     <div class="mt-6">
                                         <div>
-                                        <div>
-                                            @if (session()->has('success'))
-                                                <div class="alert alert-success">
-                                                    {{ session('success') }}
-                                                </div>
-                                            @endif
+                                            {!! Form::open(['route' => 'purchase.create', 'method' => 'POST', 'id' => 'payment-form']) !!}
+                                            {{ csrf_field() }}
+                                            {{ Form::hidden('product', $product->id, ['id' => 'product']) }}
+                                            <div class="mb-4">
+                                                {{ Form::label('name', 'Name') }}
+                                                {{ Form::text('name', old('name'), [
+                                                          'id' => 'card-holder-name',
+                                                          'class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''),
+                                                          'placeholder' => 'Name on the card']) }}
+                                                @if ($errors->has('name'))
+                                                    <span
+                                                        class="text-red-500 text-xs">{{ $errors->first('name') }}</span>
+                                                @endif
+                                                <div id="name-error-message" class="text-red-500 text-xs"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                {!! Form::label(null, __('product/texts.card_details'), ['class' => 'block text-gray-700']) !!}
+                                                <div id="card-element"></div>
+                                            </div>
+                                            <livewire:intent/>
+                                            {!! Form::close() !!}
+
+                                            <div>
+                                                @if (session()->has('success'))
+                                                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                                        {{ session('success') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
                                         </div>
-                                        {!! Form::open(['route' => 'purchase.create', 'method' => 'POST', 'id' => 'payment-form']) !!}
-                                        {{ csrf_field() }}
-                                        {{ Form::hidden('product', $product->id, ['id' => 'product']) }}
-                                        <div class="mb-4">
-                                            {{ Form::label('name', 'Name') }}
-                                            {{ Form::text('name', old('name'), [
-                                                      'id' => 'card-holder-name',
-                                                      'class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''),
-                                                      'placeholder' => 'Name on the card']) }}
-                                            @if ($errors->has('name'))
-                                                <span class="text-red-500 text-xs">{{ $errors->first('name') }}</span>
-                                            @endif
-                                            <div id="name-error-message" class="text-red-500 text-xs"></div>
-                                        </div>
-                                        <div class="mb-4">
-                                            {!! Form::label(null, __('product/texts.card_details'), ['class' => 'block text-gray-700']) !!}
-                                            <div id="card-element"></div>
-                                        </div>
-                                        <div class="mt-6">
-                                            {{ Form::button('Purchase', [
-                                    'type' => 'submit', 'class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full',
-                                    'id' => 'card-button', 'data-secret' => $intent->client_secret]) }}
-{{--
-                                            {!! Form::submit('Purchase', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full']) !!}
---}}
-                                        </div>
-                                        {!! Form::close() !!}
+
+
+                                        {{-- <a href="{{ route('products.show', $product->slug) }}"
+                                            class="{{ request()->routeIs('billing-portal.subscription.index') ? 'bg-gray-200' : '' }}
+                                                flex space-x-2 text-gray-500 hover:bg-gray-200 p-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 font-bold border-none shadow-none text-center"
+                                         >@lang('product/texts.purchase')</a>--}}
                                     </div>
-
-
-                                   {{-- <a href="{{ route('products.show', $product->slug) }}"
-                                       class="{{ request()->routeIs('billing-portal.subscription.index') ? 'bg-gray-200' : '' }}
-                                           flex space-x-2 text-gray-500 hover:bg-gray-200 p-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 font-bold border-none shadow-none text-center"
-                                    >@lang('product/texts.purchase')</a>--}}
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            const stripe = Stripe('{{ config('services.stripe.key')}}')
+
+            const elements = stripe.elements()
+            const cardElement = elements.create('card')
+
+            cardElement.mount('#card-element')
+
+            const form = document.getElementById('payment-form')
+            const cardBtn = document.getElementById('card-button')
+            const cardHolderName = document.getElementById('card-holder-name')
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault()
+
+                const nameFieldValue = cardHolderName.value;
+                if (!nameFieldValue.trim()) {
+                    const errorElement = document.getElementById('name-error-message')
+                    errorElement.textContent = 'Name is required'
+                    return;
+                }
+                const errorElement = document.getElementById('name-error-message')
+                errorElement.textContent = ''
+
+                cardBtn.disabled = true
+                const {setupIntent, error} = await stripe.confirmCardSetup(
+                    cardBtn.dataset.secret, {
+                        payment_method: {
+                            card: cardElement,
+                            billing_details: {
+                                name: cardHolderName.value
+                            }
+                        }
+                    }
+                )
+
+                if (error) {
+                    cardBtn.disabled = false
+                } else {
+                    let token = document.createElement('input')
+                    token.setAttribute('type', 'hidden')
+                    token.setAttribute('name', 'token')
+                    token.setAttribute('value', setupIntent.payment_method)
+                    form.appendChild(token)
+                    form.submit();
+                }
+            })
+        </script>
+    @endpush
 </x-app-layout>
-
-
 {{--
 @extends('layouts.app')
 

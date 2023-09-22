@@ -13,7 +13,6 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <script src="https://js.stripe.com/v3/"></script>
         <!-- Styles -->
         @livewireStyles
     </head>
@@ -41,53 +40,7 @@
         @stack('modals')
 
         @livewireScripts
+
+        @stack('scripts') <!-- Include pushed scripts -->
     </body>
-    <script>
-        const stripe = Stripe('{{ config('cashier.key')}}')
-
-        const elements = stripe.elements()
-        const cardElement = elements.create('card')
-
-        cardElement.mount('#card-element')
-
-        const form = document.getElementById('payment-form')
-        const cardBtn = document.getElementById('card-button')
-        const cardHolderName = document.getElementById('card-holder-name')
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault()
-
-            const nameFieldValue = cardHolderName.value;
-            if (!nameFieldValue.trim()) {
-                const errorElement = document.getElementById('name-error-message')
-                errorElement.textContent = 'Name is required'
-                return;
-            }
-            const errorElement = document.getElementById('name-error-message')
-            errorElement.textContent = ''
-
-            cardBtn.disabled = true
-            const {setupIntent, error} = await stripe.confirmCardSetup(
-                cardBtn.dataset.secret, {
-                    payment_method: {
-                        card: cardElement,
-                        billing_details: {
-                            name: cardHolderName.value
-                        }
-                    }
-                }
-            )
-
-            if (error) {
-                cardBtn.disabled = false
-            } else {
-                let token = document.createElement('input')
-                token.setAttribute('type', 'hidden')
-                token.setAttribute('name', 'token')
-                token.setAttribute('value', setupIntent.payment_method)
-                form.appendChild(token)
-                form.submit();
-            }
-        })
-    </script>
 </html>

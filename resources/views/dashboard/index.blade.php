@@ -13,12 +13,15 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                        @if(session('error'))
+                    <div>
+                        @if (session()->has('success'))
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                                 role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                    </div>
+                    @if(session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>

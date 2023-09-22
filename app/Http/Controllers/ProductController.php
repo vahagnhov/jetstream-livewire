@@ -67,9 +67,7 @@ class ProductController extends Controller
     {
         $this->authorize('show', $product);
 
-        $intent = auth()->user()->createSetupIntent();
-
-        return view("products.purchase", compact("product", "intent"));
+        return view("products.purchase", compact("product"));
     }
 
 
@@ -121,7 +119,6 @@ class ProductController extends Controller
         $this->userRepository->assignUserRole($request, $product->product_type);
 
         $successMessage = trans('product/messages.purchased_success');
-        session()->flash('success', $successMessage);
-        return redirect()->back()->with('success', $successMessage); //
+        return redirect()->back()->with('success', $successMessage);
     }
 }

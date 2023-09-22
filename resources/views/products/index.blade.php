@@ -153,6 +153,11 @@
                                            class="{{ request()->routeIs('billing-portal.subscription.index') ? 'bg-gray-200' : '' }}
                                                flex space-x-2 text-gray-500 hover:bg-gray-200 p-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 font-bold border-none shadow-none text-center"
                                         >@lang('product/texts.choose')</a>
+
+                                       {{-- <x-nav-link href="{{ route('products.show', $product->slug) }}" :active="request()->routeIs('products.index')">
+                                            PRRRR
+                                        </x-nav-link>--}}
+
                                         {{--  <x-secondary-button
                                               wire:click="swapPlan('{{ route('products.show', $product->slug) }}')"
                                               wire:loading.attr="disabled"
